@@ -18,10 +18,6 @@ namespace DataAccsess.DAO
                 using (var context = new EmployeeManagementContext())
                 {
                     return context.Employees.Include(r => r.Role).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-
-                    //var listEmployee = context.Employees.Include(r => r.Role).ToList();
-                    //var result = Pagination<Employee>.Paging((IQueryable<Employee>)listEmployee, currentPage, pageSize);
-                    //return result;
                 }
             }
             catch (Exception ex)
