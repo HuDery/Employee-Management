@@ -13,6 +13,7 @@ namespace Repositories.Heper
     {
         public Mapping()
         {
+            CreateMap<Employee, ListEmployeeDTO>().ReverseMap();
             CreateMap<Employee, CreateEmployeeDTO>().ReverseMap();
             CreateMap<Employee, UpdateEmployeeDTO>().ReverseMap();
         }

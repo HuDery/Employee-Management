@@ -10,7 +10,7 @@ namespace Repositories.EmployeeRepositories
 {
     public interface IEmployeeRepository
     {
-        List<Employee> GetEmployees(int page, int pageSize);
+        List<ListEmployeeDTO> GetEmployees(int page, int pageSize);
         Employee GetEmployeeById(int id);
         bool CreateEmployee(CreateEmployeeDTO emp);
         bool UpdateEmployee(UpdateEmployeeDTO emp);

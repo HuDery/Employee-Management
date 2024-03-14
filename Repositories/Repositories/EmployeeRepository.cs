@@ -3,6 +3,7 @@ using BusinessObjects.Models;
 using DataAccsess.DAO;
 using DataAccsess.DAOs;
 using Repositories.DTOs;
+using Repositories.Heper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,28 +21,34 @@ namespace Repositories.EmployeeRepositories
             _mapper = mapper;
         }
 
-        public List<Employee> GetEmployees(int page, int pageSize)
+        public List<ListEmployeeDTO> GetEmployees(int page, int pageSize)
         {
-            return EmployeeDAO.GetAllEmployee(page, pageSize);
+            List<Employee> employees = EmployeeDAO.GetAllEmployee(page, pageSize);
+            List<ListEmployeeDTO> listEmployees = _mapper.Map<List<ListEmployeeDTO>>(employees);
+            foreach(var employee in listEmployees)
+            {
+                employee.Age = AgeCalculator.CalculatorAge(employee.BirthDay);
+            }
+            return listEmployees;
         }
 
         public Employee GetEmployeeById(int id)
         {
-            return EmployeeDAO.GetAllEmployeeById(id);
+            return EmployeeDAO.GetEmployeeById(id);
         }
         public bool CreateEmployee(CreateEmployeeDTO emp)
         {
             if(emp == null) return false;
+            int count = EmployeeDAO.CountEmployeeCode();
             var employee = _mapper.Map<Employee>(emp);
-            employee.EmployeeCode = GenerateCodeDAO.GenerateEmployeeCode();
-            employee.Age = DateTime.Now.Year - employee.BirthDay.Year;
+            employee.EmployeeCode = GenerateCodeDAO.GenerateEmployeeCode(count);
             EmployeeDAO.CreateEmployee(employee);
             return true;
         }
 
         public bool UpdateEmployee(UpdateEmployeeDTO emp)
         {
-            var check = EmployeeDAO.GetAllEmployeeById(emp.Id);
+            var check = EmployeeDAO.GetEmployeeById(emp.Id);
             if(check == null) return false;
             var employee = _mapper.Map(emp, check);
             EmployeeDAO.UpdateEmployee(employee);
@@ -50,7 +57,7 @@ namespace Repositories.EmployeeRepositories
 
         public bool DeleteEmployee(int id)
         {
-            var check = EmployeeDAO.GetAllEmployeeById(id);
+            var check = EmployeeDAO.GetEmployeeById(id);
             if (check == null) return false;
             EmployeeDAO.DeleteEmployee(id);
             return true;

@@ -8,14 +8,14 @@ namespace DataAccsess.DAOs
 {
     public class GenerateCodeDAO
     {
-        private static int counter = 0;
+        private static int count;
 
-        public static string GenerateEmployeeCode()
+        public static string GenerateEmployeeCode(int count)
         {
             string prefix = "NV";
             DateTime today = DateTime.Now;
-            counter++;
-            string code = $"{prefix}_{today.Year}_{today.Month}_{today.Day}_{counter}";
+            count++;
+            string code = $"{prefix}_{today.Year}_{today.Month}_{today.Day}_{count}";
             return code;
         }
     }

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessObjects.Models
+namespace Repositories.DTOs
 {
-    public partial class Employee
+    public class ListEmployeeDTO
     {
-        public int Id { get; set; }
         public string EmployeeCode { get; set; } = null!;
         public string EmployeeName { get; set; } = null!;
         public DateTime BirthDay { get; set; }
-        public int RoleId { get; set; }
-
-        public virtual Role Role { get; set; } = null!;
+        public int Age { get; set; }
     }
 }

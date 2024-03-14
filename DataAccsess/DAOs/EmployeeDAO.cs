@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DataAccsess.DAO
@@ -16,7 +18,18 @@ namespace DataAccsess.DAO
             {
                 using (var context = new EmployeeManagementContext())
                 {
-                    return context.Employees.Include(r => r.Role).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                    var result = context.Employees
+                        .Select(e => new Employee
+                        {
+                            EmployeeCode = e.EmployeeCode,
+                            EmployeeName = e.EmployeeName,
+                            BirthDay = e.BirthDay,
+                        })
+                        .Skip((currentPage - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -25,7 +38,51 @@ namespace DataAccsess.DAO
             }
         }
 
-        public static Employee GetAllEmployeeById(int id)
+        public static int CountEmployeeCode()
+        {
+            try
+            {
+                const string key = "lastNumber";
+                ObjectCache cache = MemoryCache.Default;
+                int maxNumber = (int)(cache[key] ?? 0);
+
+                if (maxNumber == 0)
+                {
+                    using (var context = new EmployeeManagementContext())
+                    {
+                        var employeeCodes = context.Employees.Select(e => e.EmployeeCode).ToList();
+
+                        foreach (var code in employeeCodes)
+                        {
+                            Match match = Regex.Match(code, @"\d+$");
+                            if (match.Success)
+                            {
+                                int number = int.Parse(match.Value);
+
+                                if (number > maxNumber)
+                                {
+                                    maxNumber = number;
+                                }
+                            }
+                        }
+                        cache.Set(key, maxNumber, DateTimeOffset.Now.AddDays(1));
+                    }
+                }
+                else
+                {
+                    maxNumber++;
+                    cache.Set(key, maxNumber, DateTimeOffset.Now.AddDays(1));
+                }
+                return maxNumber;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public static Employee GetEmployeeById(int id)
         {
             try
             {
@@ -64,7 +121,6 @@ namespace DataAccsess.DAO
                 EmployeeCode = emp.EmployeeCode,
                 EmployeeName = emp.EmployeeName,
                 BirthDay = emp.BirthDay,
-                Age = DateTime.Now.Year - emp.BirthDay.Year,
                 RoleId = emp.RoleId,
                 Role = null
             };
