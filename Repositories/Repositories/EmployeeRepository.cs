@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObjects.Models;
 using DataAccsess.DAO;
+using DataAccsess.DAOs;
 using Repositories.DTOs;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,12 @@ namespace Repositories.EmployeeRepositories
         }
         public bool CreateEmployee(CreateEmployeeDTO emp)
         {
-            throw new NotImplementedException();
+            if(emp == null) return false;
+            var employee = _mapper.Map<Employee>(emp);
+            employee.EmployeeCode = GenerateCodeDAO.GenerateEmployeeCode();
+            employee.Age = DateTime.Now.Year - employee.BirthDay.Year;
+            EmployeeDAO.CreateEmployee(employee);
+            return true;
         }
 
         public bool UpdateEmployee(UpdateEmployeeDTO emp)

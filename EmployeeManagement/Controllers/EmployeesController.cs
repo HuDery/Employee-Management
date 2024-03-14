@@ -32,6 +32,13 @@ namespace EmployeeManagementAPI.Controllers
             return Ok(emp);
         }
 
+        [HttpPost]
+        public IActionResult CreateEmployee(CreateEmployeeDTO employee)
+        {
+            var isSuccess = _repo.CreateEmployee(employee);
+            return isSuccess ? Ok("Create successfull!") : BadRequest("Create Fail!");
+        }
+
         [HttpPut]
         public IActionResult UpdateEmployee(UpdateEmployeeDTO employee)
         {
