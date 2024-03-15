@@ -43,7 +43,7 @@ namespace EmployeeManagementAPI.Controllers
         public IActionResult UpdateEmployee(UpdateEmployeeDTO employee)
         {
             var isSuccess = _repo.UpdateEmployee(employee);
-            return isSuccess ? Ok("Update successfull!") : BadRequest("Employee does not exist!");
+            return isSuccess ? Ok("Update successfull!") : NotFound("Employee does not exist!");
         }
 
         [HttpDelete("{id}")]

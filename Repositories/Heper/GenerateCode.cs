@@ -8,8 +8,6 @@ namespace Repositories.Heper
 {
     public class GenerateCode
     {
-        private static int count;
-
         public static string GenerateEmployeeCode(int count)
         {
             //[NV] _[YYYY]_[MM]_[DD]_[n]
