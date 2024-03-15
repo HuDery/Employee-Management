@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccsess.DAOs
+namespace Repositories.Heper
 {
-    public class GenerateCodeDAO
+    public class GenerateCode
     {
         private static int count;
 
         public static string GenerateEmployeeCode(int count)
         {
+            //[NV] _[YYYY]_[MM]_[DD]_[n]
             string prefix = "NV";
             DateTime today = DateTime.Now;
             count++;

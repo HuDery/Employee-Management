@@ -40,6 +40,7 @@ namespace DataAccsess.DAO
 
         public static int CountEmployeeCode()
         {
+            //[NV]_[YYYY]_[MM]_[DD]_[n]
             try
             {
                 const string key = "lastNumber";

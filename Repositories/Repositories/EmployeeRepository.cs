@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.Models;
 using DataAccsess.DAO;
-using DataAccsess.DAOs;
 using Repositories.DTOs;
 using Repositories.Heper;
 using System;
@@ -41,7 +40,7 @@ namespace Repositories.EmployeeRepositories
             if(emp == null) return false;
             int count = EmployeeDAO.CountEmployeeCode();
             var employee = _mapper.Map<Employee>(emp);
-            employee.EmployeeCode = GenerateCodeDAO.GenerateEmployeeCode(count);
+            employee.EmployeeCode = GenerateCode.GenerateEmployeeCode(count);
             EmployeeDAO.CreateEmployee(employee);
             return true;
         }
